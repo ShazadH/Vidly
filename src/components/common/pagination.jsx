@@ -1,28 +1,20 @@
 import React from "react";
+import _ from "lodash"; // underscore library
 
 const Pagination = (props) => {
-  console.log(props.movies);
-  const pagesNumbers = Math.ceil(props.movies.length / 4);
-  console.log(pagesNumbers);
+  const { itemsCount, pageSize } = props;
+  const pagesCount = Math.ceil(itemsCount / pageSize);
+  if (pagesCount === 1) return null;
+  const pages = _.range(1, pagesCount + 1);
 
   return (
-    <nav aria-label="Page navigation example">
+    <nav>
       <ul class="pagination">
-        <li class="page-item">
-          <a class="page-link" href="#">
-            1
-          </a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="#">
-            2
-          </a>
-        </li>
-        <li class="page-item">
-          <a class="page-link" href="#">
-            3
-          </a>
-        </li>
+        {pages.map((page) => (
+          <li key={page} class="page-item">
+            <a class="page-link">{page}</a>
+          </li>
+        ))}
       </ul>
     </nav>
   );
