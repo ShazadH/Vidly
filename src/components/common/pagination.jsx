@@ -1,12 +1,11 @@
 import React from "react";
-import _ from "lodash"; // underscore library
+import _ from "lodash"; // from underscore library
 
 const Pagination = (props) => {
   const { itemsCount, pageSize, currentPage, onPageChange } = props;
-  console.log(currentPage);
   const pagesCount = Math.ceil(itemsCount / pageSize);
   if (pagesCount === 1) return null;
-  const pages = _.range(1, pagesCount + 1);
+  const pages = _.range(1, pagesCount + 1); //lodash@4.17.10
 
   return (
     <nav>
@@ -16,6 +15,7 @@ const Pagination = (props) => {
             key={page}
             className={page === currentPage ? "page-item active" : "page-item"}
           >
+            {/* eslint-disable-next-line */}
             <a className="page-link" onClick={() => onPageChange(page)}>
               {page}
             </a>
