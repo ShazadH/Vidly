@@ -68,7 +68,6 @@ class Movies extends Component {
             [sortColumn.path],
             [sortColumn.order]
         );
-        console.log(sorted);
 
         const movies = paginate(sorted, currentPage, pageSize);
 
