@@ -13,12 +13,6 @@ export class LoginForm extends Component {
         password: Joi.string().required().label("Password"),
     };
 
-    handleChange = ({ currentTarget: input }) => {
-        const account = { ...this.state.account };
-        account[input.name] = input.value;
-        this.setState({ account });
-    };
-
     validate = () => {
         const options = { abortEarly: false };
         const { error } = Joi.validate(
@@ -27,11 +21,34 @@ export class LoginForm extends Component {
             options
         );
 
+        console.log({ error });
+
         if (!error) return null;
 
         const errors = {};
         for (let item of error.details) errors[item.path[0]] = item.message;
         return errors;
+    };
+
+    validateProperty = ({ name, value }) => {
+        const obj = { [name]: value };
+        const schema = { [name]: this.schema[name] };
+        const { error } = Joi.validate(obj, schema);
+        console.log({ error });
+        return error ? error.details[0].message : null;
+    };
+
+    handleChange = ({ currentTarget: input }) => {
+        const errors = { ...this.state.errors };
+        const errorMessage = this.validateProperty(input);
+
+        if (errorMessage) errors[input.name] = errorMessage;
+        else delete errors[input.name];
+
+        const account = { ...this.state.account };
+        account[input.name] = input.value;
+
+        this.setState({ account, errors });
     };
 
     handleSubmit = (e) => {
