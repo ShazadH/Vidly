@@ -4,6 +4,7 @@ import Input from "./common/input";
 export class LoginForm extends Component {
     state = {
         account: { username: "", password: "" },
+        errors: {},
     };
 
     handleChange = ({ currentTarget: input }) => {
@@ -12,16 +13,31 @@ export class LoginForm extends Component {
         this.setState({ account });
     };
 
+    validate = () => {
+        const errors = {};
+
+        const { account } = this.state;
+        if (account.username.trim() === "")
+            errors.username = "Username is required";
+        if (account.password.trim() === "")
+            errors.password = "Password is required";
+
+        return Object.keys(errors).length === 0 ? null : errors;
+    };
+
     handleSubmit = (e) => {
         e.preventDefault();
 
+        const errors = this.validate();
+        this.setState({ errors: errors || {} });
+        if (errors) return;
+
         //Call the server
-        const username = this.username.current.value;
-        console.log(username);
+        console.log("Submitted");
     };
 
     render() {
-        const { account } = this.state;
+        const { account, errors } = this.state;
         return (
             <div>
                 <h1>Login</h1>
@@ -30,13 +46,14 @@ export class LoginForm extends Component {
                         name="username"
                         label="Username"
                         value={account.username}
+                        error={errors.username}
                         onChange={this.handleChange}
-                        autoFocus
                     />
                     <Input
                         name="password"
                         label="Password"
                         value={account.password}
+                        error={errors.password}
                         onChange={this.handleChange}
                     />
                     <button className="btn btn-primary">Login</button>
